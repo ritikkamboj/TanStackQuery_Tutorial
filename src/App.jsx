@@ -5,6 +5,7 @@ function App() {
 
 
   return <div>
+     <h1 className="heading">My Posts</h1>
     <PostList/>
   </div>;
 }

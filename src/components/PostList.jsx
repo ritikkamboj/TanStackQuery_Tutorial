@@ -3,24 +3,29 @@ import React from "react";
 import { fetchPosts } from "../api/api";
 
 function PostList() {
-  const { data, isLoading, isError, error } = useQuery({
+  const { data: postData, isLoading, isError, error } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
   });
 
-  console.log(data, isLoading, isError, error);
-  return <div>{isLoading && <p>loading...</p>}
-  {isError && <p>{error.message}</p>}
-  {data?.map((post)=> {
-    
-    return <p key={post.id}>{post.title} {post.tags.map((tags)=> <span>{tags}</span>)} </p>})
-  
-  
-  
-  }
-  
-  
-  </div>;
+  console.log(postData, isLoading, isError, error);
+  return (
+    <div className="container">
+       
+      {isLoading && <p>loading...</p>}
+      {isError && <p>{error.message}</p>}
+      {postData?.map((post) => {
+        return (
+          <div key={post.id} className="post">
+           <div> {post.title}</div>
+            {post.tags.map((tags) => (
+              <span key={tags}>{tags}</span>
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 export default PostList;
