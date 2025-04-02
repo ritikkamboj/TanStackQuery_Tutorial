@@ -19,3 +19,11 @@ export const addPost = async (post) => {
     return res.json();
 
 }
+
+export const fetchTags = async () => {
+    const res = await fetch(`http://localhost:3000/tags`);
+    const data = res.json();
+
+    return data;
+
+}

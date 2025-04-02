@@ -15,6 +15,7 @@ function PostList() {
   console.log(postData, isLoading, isError, error);
   return (
     <div className="container">
+      
        
       {isLoading && <p>loading...</p>}
       {isError && <p>{error.message}</p>}
