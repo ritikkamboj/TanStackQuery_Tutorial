@@ -31,3 +31,38 @@ body {
   font-size: 30px;
   text-transform: uppercase;
 }
+
+.container > form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.container > form > button {
+  cursor: pointer;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  text-transform: uppercase;
+  background-color: rgb(37, 37, 37);
+  padding: 8px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.postbox {
+  border: none;
+  border-bottom: 2px solid grey;
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.tags {
+  display: flex;
+  justify-content: space-around;
+}
+.items {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}

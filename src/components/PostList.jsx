@@ -13,11 +13,10 @@ function PostList() {
     queryFn: fetchPosts,
   });
 
-  const {data: tagsData} = useQuery({
-    queryKey : ['tags'],
-    queryFn : fetchTags
-  })
-
+  const { data: tagsData } = useQuery({
+    queryKey: ["tags"],
+    queryFn: fetchTags,
+  });
 
   const {
     mutate,
@@ -33,17 +32,17 @@ function PostList() {
   return (
     <div className="container">
       <form action="">
-        <input type="text" placeholder="Enter Your Text..." name="title" />
+        <input type="text" placeholder="Enter Your Text..." name="title" className="postbox" />
 
-<div className="tags">
-{tagsData?.map((tags)=> <div>
-            <input type="checkbox" name="tag" id="tag" />
-            <label htmlFor="tag">{tags}</label>
-           
-        </div>)}
-</div>
+        <div className="tags">
+          {tagsData?.map((tags) => (
+            <div key={tags} className="items">
+              <input type="checkbox" name="tag" id="tag" />
+              <label htmlFor="tag">{tags}</label>
+            </div>
+          ))}
+        </div>
 
-       
         <button>Post</button>
       </form>
 
