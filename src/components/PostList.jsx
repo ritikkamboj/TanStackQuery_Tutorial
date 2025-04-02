@@ -1,11 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React from "react";
-import { fetchPosts } from "../api/api";
+import { addPost, fetchPosts } from "../api/api";
 
 function PostList() {
   const { data: postData, isLoading, isError, error } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
+  });
+
+  const {mutate, isError : isPostError, error: postError , isPending, reset} = useMutation({
+    mutationFn : addPost,
   });
 
   console.log(postData, isLoading, isError, error);

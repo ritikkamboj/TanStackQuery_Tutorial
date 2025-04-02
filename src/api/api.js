@@ -5,3 +5,17 @@ export const fetchPosts = async () => {
     return data;
 
 }
+export const addPost = async (post) => {
+
+    const res = await fetch(`http://localhost:3000/posts`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "applications/json"
+        },
+        body: JSON.stringify(post)
+
+    })
+
+    return res.json();
+
+}
