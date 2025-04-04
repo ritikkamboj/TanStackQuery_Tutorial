@@ -14,7 +14,7 @@ function PostList() {
     error,
   } = useQuery({
     queryKey: ["posts"],
-    queryFn: fetchPosts(),
+    queryFn: fetchPosts,
   });
 
   const { data: tagsData } = useQuery({
@@ -104,11 +104,11 @@ function PostList() {
       {isError && <p>{error.message}</p>}
       {isPostError && <p onClick={() => reset()}>{postError.message}</p>}
 
-      <div className="pages">
+      {/* <div className="pages">
         <button>Previous Page</button>
         <p>{page}</p>
         <button>Next Page </button>
-      </div>
+      </div> */}
       {postData?.map((post) => {
         return (
           <div key={post.id} className="post">
