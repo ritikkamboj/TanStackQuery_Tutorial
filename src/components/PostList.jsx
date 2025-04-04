@@ -38,6 +38,7 @@ function PostList() {
     const formData = new FormData(e.target);
     console.log(formData)
     const title = formData.get('title');
+    console.log(title)
 // console.log(Array.from(formData.keys()))
 const tags =Array.from(formData.keys()).filter((key)=> formData.get(key)==='on');
 console.log(tags)
@@ -50,8 +51,8 @@ console.log(tags)
         <div className="tags">
           {tagsData?.map((tags) => (
             <div key={tags} className="items">
-              <input type="checkbox" name="tag" id="tag" />
-              <label htmlFor="tag">{tags}</label>
+              <input type="checkbox" name={tags} id={tags} />
+              <label htmlFor={tags}>{tags}</label>
             </div>
           ))}
         </div>
