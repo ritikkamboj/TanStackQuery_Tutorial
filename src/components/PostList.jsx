@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { addPost, fetchPosts, fetchTags } from "../api/api";
 
@@ -18,6 +18,8 @@ function PostList() {
     queryFn: fetchTags,
   });
 
+ const queryClient =useQueryClient();
+
   const {
     mutate,
     isError: isPostError,
@@ -26,27 +28,69 @@ function PostList() {
     reset,
   } = useMutation({
     mutationFn: addPost,
+    onMutate : ()=>
+    {
+      return {id: 1}
+
+    },
+    onSuccess : (data, variables , context)=>
+    {
+      // console.log(data , variables , context)
+      queryClient.invalidateQueries({
+        queryKey : ['posts'],
+        exact: true,
+      });
+
+    },
+    // onError : (error , variables , context)=>
+    // {
+
+    // },
+    // onSettled : (data , error , variables , context) =>
+    // {
+
+    // }
   });
 
-  console.log(postData, isLoading, isError, error); 
+  console.log(postData, isLoading, isPostError, postError);
 
-  const handleSubmit = (e) =>
-  {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(e.target)
+
+
+
+
+    console.log(e.target);
     // console.log('jai baabe ki')
     const formData = new FormData(e.target);
-    console.log(formData)
-    const title = formData.get('title');
-    console.log(title)
-// console.log(Array.from(formData.keys()))
-const tags =Array.from(formData.keys()).filter((key)=> formData.get(key)==='on');
-console.log(tags)
-  }
+    console.log(formData);
+    const title = formData.get("title");
+    console.log(title);
+    // console.log(Array.from(formData.keys()))
+    const tags = Array.from(formData.keys()).filter(
+      (key) => formData.get(key) === "on"
+    );
+    console.log(tags);
+    
+    if (!title || !tags) {
+      return;
+    }
+
+    mutate({id : postData.length + 1 ,title, tags});
+
+    e.target.reset();
+
+
+  };
   return (
     <div className="container">
       <form action="" onSubmit={handleSubmit}>
-        <input type="text" placeholder="Enter Your Text..." name="title" className="postbox" />
+        <input
+          type="text"
+          placeholder="Enter Your Text..."
+          name="title"
+          className="postbox"
+        />
 
         <div className="tags">
           {tagsData?.map((tags) => (
@@ -60,8 +104,9 @@ console.log(tags)
         <button>Post</button>
       </form>
 
-      {isLoading && <p>loading...</p>}
+      {isLoading && isPending &&  <p>loading...</p>}
       {isError && <p>{error.message}</p>}
+      {isPostError && <p onClick={()=> reset()}>{postError.message}</p>}
       {postData?.map((post) => {
         return (
           <div key={post.id} className="post">
