@@ -1,8 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import { addPost, fetchPosts, fetchTags } from "../api/api";
 
 function PostList() {
+
+  const [page, setpage] = useState(1);
+
+
   const {
     data: postData,
     isLoading,
@@ -10,16 +14,16 @@ function PostList() {
     error,
   } = useQuery({
     queryKey: ["posts"],
-    queryFn: fetchPosts,
+    queryFn: fetchPosts(),
   });
 
   const { data: tagsData } = useQuery({
     queryKey: ["tags"],
     queryFn: fetchTags,
-    staleTime : Infinity
+    staleTime: Infinity,
   });
 
- const queryClient =useQueryClient();
+  const queryClient = useQueryClient();
 
   const {
     mutate,
@@ -29,19 +33,15 @@ function PostList() {
     reset,
   } = useMutation({
     mutationFn: addPost,
-    onMutate : ()=>
-    {
-      return {id: 1}
-
+    onMutate: () => {
+      return { id: 1 };
     },
-    onSuccess : (data, variables , context)=>
-    {
+    onSuccess: (data, variables, context) => {
       // console.log(data , variables , context)
       queryClient.invalidateQueries({
-        queryKey : ['posts'],
+        queryKey: ["posts"],
         exact: true,
       });
-
     },
     // onError : (error , variables , context)=>
     // {
@@ -58,9 +58,6 @@ function PostList() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-
-
-
     console.log(e.target);
     // console.log('jai baabe ki')
     const formData = new FormData(e.target);
@@ -72,16 +69,14 @@ function PostList() {
       (key) => formData.get(key) === "on"
     );
     console.log(tags);
-    
+
     if (!title || !tags) {
       return;
     }
 
-    mutate({id : postData.length + 1 ,title, tags});
+    mutate({ id: postData.length + 1, title, tags });
 
     e.target.reset();
-
-
   };
   return (
     <div className="container">
@@ -105,9 +100,15 @@ function PostList() {
         <button>Post</button>
       </form>
 
-      {isLoading && isPending &&  <p>loading...</p>}
+      {isLoading && isPending && <p>loading...</p>}
       {isError && <p>{error.message}</p>}
-      {isPostError && <p onClick={()=> reset()}>{postError.message}</p>}
+      {isPostError && <p onClick={() => reset()}>{postError.message}</p>}
+
+      <div className="pages">
+        <button>Previous Page</button>
+        <p>{page}</p>
+        <button>Next Page </button>
+      </div>
       {postData?.map((post) => {
         return (
           <div key={post.id} className="post">
