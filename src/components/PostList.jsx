@@ -16,6 +16,7 @@ function PostList() {
   const { data: tagsData } = useQuery({
     queryKey: ["tags"],
     queryFn: fetchTags,
+    staleTime : Infinity
   });
 
  const queryClient =useQueryClient();
